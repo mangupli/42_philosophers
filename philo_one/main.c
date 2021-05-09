@@ -1,44 +1,6 @@
-#include <pthread.h> //pthread functions
-#include <stdio.h> // printf
-#include <string.h> // memset
-#include <stdlib.h> // malloc, free,
-#include <unistd.h> // write, usleep
-#include <sys/time.h> // gettimeofday
+#include "philo_one.h"
 
-typedef unsigned long long ms_t;
-
-#define TAKE_FORK 0
-#define EAT 1
-#define SLEEP 2
-#define THINK 3
-#define DIE 4
-
-int	ft_atoi(const char *str)
-{
-	int	minus;
-	int	i;
-	int	result;
-
-	i = 0;
-	minus = 1;
-	result = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			minus = -1;
-		i++;
-	}
-	while (str[i] <= 57 && str[i] >= 48)
-	{
-		result = result * 10 + (str[i] - 48);
-		i++;
-	}
-	return (minus * result);
-}
-
-int display_message(ms_t ms, int no, int act)
+int display_message(ms_type ms, int no, int act)
 {
 	if (act == TAKE_FORK)
 		printf("%llu %d %s\n", ms, no, "has taken a fork");
@@ -53,27 +15,60 @@ int display_message(ms_t ms, int no, int act)
 	return (EXIT_SUCCESS);
 }
 
-ms_t get_time()
+void *philo_life(void *a)
 {
-	struct timeval  time;
-	ms_t ms;
+	int num;
 
-	if (gettimeofday(&time, NULL) == -1)
-		return (EXIT_FAILURE);
-	ms = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-	return (ms);
+	num = -1;
+	while (++num < g_data.p)
+	{
+		display_message(get_time(), num + 1, TAKE_FORK);
+		display_message(get_time(), num + 1, TAKE_FORK);
+		g_data.phil[num].last_meal = get_time();
+		display_message(get_time(), num + 1, EAT);
+		usleep(g_data.time_eat * 1000);
+		display_message(get_time(), num + 1, SLEEP);
+		usleep(g_data.time_sleep * 1000);
+		display_message(get_time(), num + 1, THINK);
+	}
+	return (NULL);
 }
 
+void *check_death(void *a)
+{
+	ms_type time;
+	int i;
+
+	//pthread_detach(g_data.death);
+	while (1)
+	{
+		time = get_time();
+		i = -1;
+		while (++i < g_data.p)
+		{
+			if (time - g_data.phil[i].last_meal >= g_data.time_die)
+			{
+				display_message(get_time(), i + 1, DIE);
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
+	return (NULL);
+}
 
 int main(int argc, char **argv)
 {
-	if (argc < 5 || argc > 6)
-		printf("Wrong number of arguments: expected 4 or 5\n"
-		 "1.number_of_philosophers 2.time_to_die 3.time_to_eat "
-			   "4.time_to_sleep 5.[number_of_times_each_philosopher_must_eat]\n");
-	else
-	{
-		display_message(get_time(), ft_atoi(argv[1]), ft_atoi(argv[2]));
-	}
+	void *result;
+
+	if (init(argc, argv) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+
+	if (pthread_create(&g_data.phil[0].t, NULL, philo_life, NULL) == -1)
+		ft_error("Can't create a thread");
+	if (pthread_join(g_data.phil[0].t, &result) == -1)
+		ft_error("Can't join a thread");
+	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
+		ft_error("Can't create a thread");
+
 	return (EXIT_SUCCESS);
 }

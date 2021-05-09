@@ -2,7 +2,7 @@ NAME = philo_one
 
 all:	$(NAME)
 
-SRCS = main.c
+SRCS = main.c utils.c start.c
 
 $(NAME): $(SRCS)
 	gcc $(SRCS) -pthread -o $@
