@@ -31,10 +31,11 @@ typedef struct s_data
 	int					time_sleep;
 	int					time_die;
 	int					must_eat;
-	pthread_mutex_t		f1;
-	pthread_mutex_t		f2;
+	pthread_mutex_t		write;
+	pthread_mutex_t		check;
 	t_phil				*phil;
 	pthread_t			death;
+	int					*forks;
 }						t_data;
 
 t_data g_data;

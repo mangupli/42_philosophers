@@ -55,11 +55,28 @@ int init_phils(void)
 	return (EXIT_SUCCESS);
 }
 
+int	init_forks(void)
+{
+	int i;
+
+	g_data.forks = (int *)malloc(sizeof(int) * g_data.p);
+	if (g_data.forks == NULL)
+		return (EXIT_FAILURE);
+	i = -1;
+	while (++i < g_data.p)
+		g_data.forks[i] = 1;
+	return (EXIT_SUCCESS);
+}
+
 int init(int argc, char **argv)
 {
 	if (validator(argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (init_phils() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	if (init_forks() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	pthread_mutex_init(&g_data.write, NULL);
+	pthread_mutex_init(&g_data.check, NULL);
 	return (EXIT_SUCCESS);
 }
