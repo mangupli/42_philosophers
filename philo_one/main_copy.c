@@ -2,27 +2,26 @@
 
 int display_message(ms_type ms, int no, int act)
 {
-	ms_type time;
-
-	time = ms - g_data.start_time;
 	pthread_mutex_lock(&g_data.write);
 	if (act == TAKE_FORK)
-		print_msg(time, no, "has taken a fork");
+		printf("%8.llu %d %s\n", ms - g_data.start_time, no, "has taken a fork");
 	else if (act == EAT)
-		print_msg(time, no, "is eating");
+		printf("%8.llu %d %s\n", ms - g_data.start_time, no, "is eating");
 	else if (act == SLEEP)
-		print_msg(time, no, "is sleeping");
+		printf("%8.llu %d %s\n", ms - g_data.start_time, no, "is sleeping");
 	else if (act == THINK)
-		print_msg(time, no, "is thinking");
+		printf("%8.llu %d %s\n", ms - g_data.start_time, no, "is thinking");
 	else if (act == DIE)
-		print_msg(time, no, "died");
+		printf("%8.llu %d %s\n", ms - g_data.start_time, no, "died");
 	pthread_mutex_unlock(&g_data.write);
 	return (EXIT_SUCCESS);
 }
 
-int get_forks(long num, int flag)
+void get_forks(long num, int flag)
 {
 	long next;
+
+	
 
 	if (num == g_data.p)
 		next = 0;
@@ -31,27 +30,17 @@ int get_forks(long num, int flag)
 	if (flag == UP)
 	{
 		pthread_mutex_lock(&g_data.lock);
-		
-		if (g_data.forks[num] == 1 || g_data.forks[next] == 1)
-		{
-			g_data.forks[num] = 0;
-			display_message(get_time(), num + 1, TAKE_FORK);
-			g_data.forks[next] = 0;
-			display_message(get_time(), num + 1, TAKE_FORK);
-			pthread_mutex_unlock(&g_data.lock);
-		}
-		else
-		{
-			pthread_mutex_unlock(&g_data.lock);
-			return (EXIT_FAILURE);
-		}
+		pthread_mutex_lock(&g_data.phil[num].fork);
+		display_message(get_time(), num + 1, TAKE_FORK);
+		pthread_mutex_lock(&g_data.phil[next].fork);
+		display_message(get_time(), num + 1, TAKE_FORK);
+		pthread_mutex_unlock(&g_data.lock);
 	}
 	else if (flag == DOWN)
 	{
-		g_data.forks[num] = 1;
-		g_data.forks[next] = 1;
+		pthread_mutex_unlock(&g_data.phil[num].fork);
+		pthread_mutex_unlock(&g_data.phil[next].fork);
 	}
-	return (EXIT_SUCCESS);
 }
 
 void *philo_life(void *a)
@@ -66,8 +55,7 @@ void *philo_life(void *a)
 		next = 0;
 		else
 		next = num + 1;
-		if (get_forks(num, UP) == EXIT_FAILURE)
-			continue;
+		get_forks(num, UP);
 		g_data.phil[num].last_meal = get_time();
 		display_message(g_data.phil[num].last_meal, num + 1, EAT);
 		usleep(g_data.time_eat * 1000);
@@ -79,7 +67,7 @@ void *philo_life(void *a)
 	return (NULL);
 }
 
-void *check_death(void *a) // TODO: add meal limit
+void *check_death(void *a)
 {
 	ms_type time;
 	int i;
@@ -100,7 +88,7 @@ void *check_death(void *a) // TODO: add meal limit
 	return (NULL);
 }
 
-int main(int argc, char **argv) // TODO: 4 410 200 200 test doesnt pass
+int main(int argc, char **argv)
 {
 	void *result;
 	long i;

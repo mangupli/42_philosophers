@@ -51,6 +51,7 @@ int init_phils(void)
 	while (++i < g_data.p)
 	{
 		g_data.phil[i].last_meal = time;
+		pthread_mutex_init(&g_data.phil[i].fork, NULL);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -74,9 +75,10 @@ int init(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (init_phils() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (init_forks() == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	 if (init_forks() == EXIT_FAILURE)
+	 	return (EXIT_FAILURE);
 	pthread_mutex_init(&g_data.write, NULL);
-	pthread_mutex_init(&g_data.check, NULL);
+	pthread_mutex_init(&g_data.lock, NULL);
+	g_data.start_time = get_time();
 	return (EXIT_SUCCESS);
 }
