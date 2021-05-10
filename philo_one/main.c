@@ -65,10 +65,12 @@ int main(int argc, char **argv)
 
 	if (pthread_create(&g_data.phil[0].t, NULL, philo_life, NULL) == -1)
 		ft_error("Can't create a thread");
-	if (pthread_join(g_data.phil[0].t, &result) == -1)
-		ft_error("Can't join a thread");
+
 	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
 		ft_error("Can't create a thread");
+
+	if (pthread_join(g_data.phil[0].t, &result) == -1)
+		ft_error("Can't join a thread");
 
 	return (EXIT_SUCCESS);
 }
