@@ -2,9 +2,7 @@ NAME = one
 
 all:	$(NAME)
 
-SRCS = main.c utils.c start.c \
-	\
-	msg.c
+SRCS = main.c utils.c start.c msg.c forks.c
 
 $(NAME): $(SRCS)
 	gcc $(SRCS) -pthread -o $@

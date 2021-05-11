@@ -2,8 +2,8 @@
 
 ms_type get_time(void)
 {
-	struct timeval  time;
-	ms_type ms;
+	struct timeval	time;
+	ms_type			ms;
 
 	if (gettimeofday(&time, NULL) == -1)
 		return (EXIT_FAILURE);
@@ -11,17 +11,21 @@ ms_type get_time(void)
 	return (ms);
 }
 
-void ft_error(char *str)
-{
-	printf("%s\n", str);
-	exit(EXIT_FAILURE);
-}
-
 static int	ft_isdigit(int c)
 {
 	if (c < 58 && c > 47)
 		return (1);
 	return (0);
+}
+
+int ft_strlen(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
 int	ft_str_is_numeric(char *str)

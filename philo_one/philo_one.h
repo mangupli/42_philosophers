@@ -19,6 +19,7 @@ typedef struct s_phil
 	ms_type				last_meal;
 	pthread_t			t;
 	pthread_mutex_t		fork;
+	int 				meals;
 }						t_phil;
 
 /*
@@ -33,11 +34,11 @@ typedef struct s_data
 	int					time_sleep;
 	int					time_die;
 	int					must_eat;
+	int 				*forks;
 	pthread_mutex_t		write;
-	pthread_mutex_t		lock;
 	t_phil				*phil;
-	int					*forks;
 	pthread_t			death;
+	pthread_t			meal;
 }						t_data;
 
 t_data g_data;
@@ -47,6 +48,7 @@ t_data g_data;
 #define SLEEP 2
 #define THINK 3
 #define DIE 4
+#define FINISH 5
 
 #define UP 0
 #define DOWN 1
@@ -57,8 +59,9 @@ int		ft_str_is_numeric(char *str);
 int		validator(int argc, char **argv);
 void	ft_error(char *str);
 ms_type	get_time(void);
-
-
-void print_msg(ms_type time, int no, char *str); //test
+int		ft_strlen(char *str);
+int		display_message(ms_type ms, int no, int act);
+void	get_forks(long num);
+void	put_down_forks(long num);
 
 #endif

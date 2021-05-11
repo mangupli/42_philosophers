@@ -1,24 +1,14 @@
 #include "philo_one.h"
 
-int ft_strlen(char *str)
+void ft_putchar(char c)
 {
-    int i;
-
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
+	write(1, &c, 1);
 }
 
 void	ft_putstr(char *s)
 {
 	if (s != NULL)
 		write(1, s, ft_strlen(s));
-}
-
-void ft_putchar(char c)
-{
-    write(1, &c, 1);
 }
 
 void	ft_putunbr(uintmax_t n)
@@ -37,12 +27,37 @@ void	ft_putunbr(uintmax_t n)
 	}
 }
 
-void print_msg(ms_type time, int no, char *str)
+static void print_msg(ms_type time, int no, char *str)
 {
-    ft_putunbr(time);
-    ft_putchar(' ');
-    ft_putunbr(no);
-    ft_putchar(' ');
-    ft_putstr(str);
-    ft_putchar ('\n');
+	ft_putunbr(time);
+	ft_putchar(' ');
+	if (no)
+	{
+		ft_putunbr(no);
+		ft_putchar(' ');
+	}
+	ft_putstr(str);
+	ft_putchar ('\n');
+}
+
+int display_message(ms_type ms, int no, int act)
+{
+	ms_type time;
+
+	time = ms - g_data.start_time;
+	pthread_mutex_lock(&g_data.write);
+	if (act == TAKE_FORK)
+		print_msg(time, no, "has taken a fork");
+	else if (act == EAT)
+		print_msg(time, no, "is eating");
+	else if (act == SLEEP)
+		print_msg(time, no, "is sleeping");
+	else if (act == THINK)
+		print_msg(time, no, "is thinking");
+	else if (act == DIE)
+		print_msg(time, no, "died");
+	else if (act == FINISH)
+		print_msg(time, no, "my philosophers are full");
+	pthread_mutex_unlock(&g_data.write);
+	return (EXIT_SUCCESS);
 }
