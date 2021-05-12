@@ -1,9 +1,10 @@
 #include "philo_one.h"
 
-void ft_error(char *str)
+int ft_error(char *str)
 {
 	printf("%s\n", str);
 	exit(EXIT_FAILURE);
+	return (EXIT_FAILURE);
 }
 
 static int parse_arguments(int argc, char **argv)

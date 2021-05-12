@@ -57,7 +57,7 @@ int		init(int argc, char **argv);
 int		ft_atoi(const char *str);
 int		ft_str_is_numeric(char *str);
 int		validator(int argc, char **argv);
-void	ft_error(char *str);
+int 	ft_error(char *str);
 ms_type	get_time(void);
 int		ft_strlen(char *str);
 int		display_message(ms_type ms, int no, int act);

@@ -70,28 +70,51 @@ void	*finish_meal(void *a) // TODO: doesnt start if must_eat == 0
 	return (NULL);
 }
 
-int	main(int argc, char **argv)
+int monitor_threads()
 {
 	void	*result;
-	long	i;
 
-	if (init(argc, argv) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
+		return(ft_error("Can't create a thread"));
+	if (g_data.must_eat != 0)
+	{
+		if (pthread_create(&g_data.meal, NULL, finish_meal, NULL) == -1)
+			return (ft_error("Can't create a thread"));
+	}
+	if (pthread_join(g_data.death, &result) == -1)
+		return(ft_error("Can't join a thread"));
+	if (g_data.must_eat != 0)
+	{
+		if (pthread_join(g_data.meal, &result) == -1)
+			return (ft_error("Can't join a thread"));
+	}
+	return (EXIT_SUCCESS);
+}
+
+int philo_threads()
+{
+	long i;
+
 	i = -1;
 	while (++i < g_data.p)
 	{
 		if (pthread_create(&g_data.phil[i].t, NULL, phi_life, (void *) i) == -1)
-			ft_error("Can't create a thread");
+			return (ft_error("Can't create a thread"));
 		if (pthread_detach(g_data.phil[i].t))
-			ft_error("Can't detach a thread");
+			return (ft_error("Can't detach a thread"));
 	}
-	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
-		ft_error("Can't create a thread");
-	if (pthread_create(&g_data.meal, NULL, finish_meal, NULL) == -1)
-		ft_error("Can't create a thread");
-	if (pthread_join(g_data.death, &result) == -1)
-		ft_error("Can't join a thread");
-	if (pthread_join(g_data.meal, &result) == -1)
-		ft_error("Can't join a thread");
+	return (EXIT_SUCCESS);
+}
+
+int	main(int argc, char **argv)
+{
+	long	i;
+
+	if (init(argc, argv) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (philo_threads() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	if (monitor_threads() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
