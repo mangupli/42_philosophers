@@ -1,6 +1,6 @@
 #include "philo_one.h"
 
-void ft_putchar(char c)
+void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
@@ -27,7 +27,7 @@ void	ft_putunbr(uintmax_t n)
 	}
 }
 
-static void print_msg(ms_type time, int no, char *str)
+static void	print_msg(t_ms time, int no, char *str)
 {
 	ft_putunbr(time);
 	ft_putchar(' ');
@@ -40,9 +40,9 @@ static void print_msg(ms_type time, int no, char *str)
 	ft_putchar ('\n');
 }
 
-int display_message(ms_type ms, int no, int act)
+int	display_message(t_ms ms, int no, int act)
 {
-	ms_type time;
+	t_ms	time;
 
 	time = ms - g_data.start_time;
 	pthread_mutex_lock(&g_data.write);

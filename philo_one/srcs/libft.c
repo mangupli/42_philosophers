@@ -1,16 +1,5 @@
 #include "philo_one.h"
 
-ms_type get_time(void)
-{
-	struct timeval	time;
-	ms_type			ms;
-
-	if (gettimeofday(&time, NULL) == -1)
-		return (EXIT_FAILURE);
-	ms = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-	return (ms);
-}
-
 static int	ft_isdigit(int c)
 {
 	if (c < 58 && c > 47)
@@ -18,9 +7,9 @@ static int	ft_isdigit(int c)
 	return (0);
 }
 
-int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
