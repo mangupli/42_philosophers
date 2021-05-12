@@ -1,6 +1,6 @@
 # Compilation #
 
-NUMBER = one
+NUMBER = two
 FLAGS = -Wall -Wextra -Werror -pthread
 
 # Directories #

@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 static int	parse_arguments(int argc, char **argv)
 {
@@ -53,7 +53,6 @@ static int	init_phils(void)
 	while (++i < g_data.p)
 	{
 		g_data.phil[i].last_meal = get_time();
-		pthread_mutex_init(&g_data.phil[i].fork, NULL);
 		g_data.phil[i].meals = 0;
 	}
 	return (EXIT_SUCCESS);
@@ -65,8 +64,13 @@ int	init(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (init_phils() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	pthread_mutex_init(&g_data.write, NULL);
-	pthread_mutex_init(&g_data.exit, NULL);
+
+	g_data.forks = sem_open("/semaphore", O_CREAT, 0666, g_data.p);
+	if (g_data.forks == SEM_FAILED)
+		return (ft_error("Couldn't open a semaphore"));
+	g_data.write = sem_open("/semaphore_write", O_CREAT, 0666, 1);
+	if (g_data.write == SEM_FAILED)
+		return (ft_error("Couldn't open a semaphore"));
 	g_data.start_time = get_time();
 	return (EXIT_SUCCESS);
 }

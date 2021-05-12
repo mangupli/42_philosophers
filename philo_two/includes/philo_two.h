@@ -1,7 +1,8 @@
 #ifndef PHILO_ONE_H
 # define PHILO_ONE_H
 
-# include <pthread.h> //pthread functions
+# include <semaphore.h> // semaphore functions
+# include <pthread.h> // pthreads functions
 # include <stdio.h> // printf
 # include <string.h> // memset
 # include <stdlib.h> // malloc, free,
@@ -21,7 +22,6 @@ typedef struct s_phil
 {
 	t_ms				last_meal;
 	pthread_t			thread;
-	pthread_mutex_t		fork;
 	int					meals;
 }						t_phil;
 
@@ -37,9 +37,9 @@ typedef struct s_data
 	int					time_to_sleep;
 	int					time_to_die;
 	int					must_eat;
-	pthread_mutex_t		write;
-	pthread_mutex_t		exit;
 	t_phil				*phil;
+	sem_t				*write;
+	sem_t				*forks;
 	pthread_t			death;
 	pthread_t			meal;
 }						t_data;
