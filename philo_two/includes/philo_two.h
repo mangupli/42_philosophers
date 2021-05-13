@@ -1,5 +1,5 @@
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 # include <semaphore.h> // semaphore functions
 # include <pthread.h> // pthreads functions
@@ -39,7 +39,7 @@ typedef struct s_data
 	int					must_eat;
 	t_phil				*phil;
 	sem_t				*write;
-	sem_t				*forks;
+	sem_t				*waiter;
 	pthread_t			death;
 	pthread_t			meal;
 }						t_data;

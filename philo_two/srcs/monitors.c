@@ -1,10 +1,5 @@
 #include "philo_two.h"
 
-static void ft_exit(int exit_code)
-{
-	exit(exit_code);
-}
-
 void	*check_death(void *a)
 {
 	t_ms	time;
@@ -20,7 +15,7 @@ void	*check_death(void *a)
 			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
 			{
 				display_message(time, i + 1, DIE);
-				ft_exit(EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 			}
 		}
 	}
@@ -42,7 +37,7 @@ void	*finish_meal(void *a)
 			else if (i + 1 == g_data.p)
 			{
 				display_message(get_time(), 0, FINISH);
-				ft_exit(EXIT_SUCCESS);
+				exit(EXIT_SUCCESS);
 			}
 		}
 	}

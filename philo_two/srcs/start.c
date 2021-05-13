@@ -58,19 +58,25 @@ static int	init_phils(void)
 	return (EXIT_SUCCESS);
 }
 
+static void	init_semaphores(void)
+{
+	sem_unlink("/semaphore");
+	sem_unlink("/semaphore_write");
+	g_data.waiter = sem_open("/semaphore", O_CREAT, 0666, g_data.p);
+	if (g_data.waiter == SEM_FAILED)
+		ft_error("Couldn't open a semaphore");
+	g_data.write = sem_open("/semaphore_write", O_CREAT, 0666, 1);
+	if (g_data.write == SEM_FAILED)
+		ft_error("Couldn't open a semaphore");
+}
+
 int	init(int argc, char **argv)
 {
 	if (validator(argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (init_phils() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-
-	g_data.forks = sem_open("/semaphore", O_CREAT, 0666, g_data.p);
-	if (g_data.forks == SEM_FAILED)
-		return (ft_error("Couldn't open a semaphore"));
-	g_data.write = sem_open("/semaphore_write", O_CREAT, 0666, 1);
-	if (g_data.write == SEM_FAILED)
-		return (ft_error("Couldn't open a semaphore"));
+	init_semaphores();
 	g_data.start_time = get_time();
 	return (EXIT_SUCCESS);
 }
