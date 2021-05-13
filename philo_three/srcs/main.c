@@ -60,9 +60,11 @@ static int	create_philo_processes(void)
 		if (g_data.phil[i].pid == 0)
 			phi_life((void *)i);
 	}
-	waitpid(-1, &status, 0);
+	ret = waitpid(-1, &status, 0);
 	if (WIFEXITED(status))
 		ret = WEXITSTATUS(status);
+	else if (ret < 0)
+		ret = EXIT_FAILURE;
 	return (ret);
 }
 

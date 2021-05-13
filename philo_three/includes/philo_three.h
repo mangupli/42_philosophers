@@ -42,6 +42,7 @@ typedef struct s_data
 	t_phil				*phil;
 	sem_t				*write;
 	sem_t				*waiter;
+	sem_t				*exit;
 	pthread_t			death;
 	pthread_t			meal;
 }						t_data;

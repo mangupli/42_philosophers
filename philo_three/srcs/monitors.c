@@ -14,6 +14,7 @@ void	*check_death(void *a)
 			time = get_time();
 			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
 			{
+				sem_wait(g_data.exit);
 				display_message(time, i + 1, DIE);
 				exit(EXIT_FAILURE);
 			}
@@ -36,6 +37,7 @@ void	*finish_meal(void *a)
 				break ;
 			else if (i + 1 == g_data.p)
 			{
+				sem_wait(g_data.exit);
 				display_message(get_time(), 0, FINISH);
 				exit(EXIT_SUCCESS);
 			}

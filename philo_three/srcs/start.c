@@ -62,10 +62,14 @@ static void	init_semaphores(void)
 {
 	sem_unlink("/semaphore");
 	sem_unlink("/semaphore_write");
+	sem_unlink("/semaphore_exit");
 	g_data.waiter = sem_open("/semaphore", O_CREAT, 0666, g_data.p);
 	if (g_data.waiter == SEM_FAILED)
 		ft_error("Couldn't open a semaphore");
 	g_data.write = sem_open("/semaphore_write", O_CREAT, 0666, 1);
+	if (g_data.write == SEM_FAILED)
+		ft_error("Couldn't open a semaphore");
+	g_data.exit = sem_open("/semaphore_exit", O_CREAT, 0666, 1);
 	if (g_data.write == SEM_FAILED)
 		ft_error("Couldn't open a semaphore");
 }
