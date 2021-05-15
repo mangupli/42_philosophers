@@ -14,7 +14,7 @@ void	put_down_forks(long num)
 	long	first;
 	long	second;
 
-	if (num == g_data.p)
+	if (num == (g_data.p - 1))
 		next = 0;
 	else
 		next = num + 1;
@@ -38,11 +38,11 @@ void	get_forks(long num)
 	long	first;
 	long	second;
 
-	if (num == g_data.p)
+	if (num == (g_data.p - 1))
 		next = 0;
 	else
 		next = num + 1;
-	if (next > num)
+	if (next < num)
 	{
 		first = num;
 		second = next;

@@ -49,7 +49,7 @@ static int	philo_threads(void)
 	long	i;
 
 	i = -1;
-	while (++i < g_data.p)
+	while (++i < (g_data.p - 1))
 	{
 		if (pthread_create(&g_data.phil[i].thread, NULL, phi_life, \
 															(void *) i) == -1)

@@ -46,7 +46,7 @@ static int	init_phils(void)
 {
 	int	i;
 
-	g_data.phil = (t_phil *)malloc(sizeof(t_phil) * g_data.p);
+	g_data.phil = (t_phil *)malloc(sizeof(t_phil) * (g_data.p - 1));
 	if (g_data.phil == NULL)
 		ft_error("Malloc returned error");
 	i = -1;
