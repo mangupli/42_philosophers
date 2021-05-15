@@ -44,7 +44,6 @@ typedef struct s_data
 	sem_t				*waiter;
 	sem_t				*exit;
 	pthread_t			death;
-	pthread_t			meal;
 }						t_data;
 
 t_data						g_data;

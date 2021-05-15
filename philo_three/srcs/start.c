@@ -70,7 +70,7 @@ static void	init_semaphores(void)
 	if (g_data.write == SEM_FAILED)
 		ft_error("Couldn't open a semaphore");
 	g_data.exit = sem_open("/semaphore_exit", O_CREAT, 0666, 1);
-	if (g_data.write == SEM_FAILED)
+	if (g_data.exit == SEM_FAILED)
 		ft_error("Couldn't open a semaphore");
 }
 
