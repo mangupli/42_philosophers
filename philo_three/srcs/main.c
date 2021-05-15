@@ -1,28 +1,5 @@
 #include "philo_three.h"
 
-static void	*phi_life(void *a)
-{
-	long	num;
-
-	num = (long)a;
-	while (1)
-	{
-		if (g_data.must_eat == 0 \
-		|| (g_data.must_eat != 0 && g_data.phil[num].meals < g_data.must_eat))
-		{
-			get_forks(num);
-			g_data.phil[num].meals++;
-			put_down_forks(num);
-			display_message(get_time(), num + 1, SLEEP);
-			usleep(g_data.time_to_sleep * 1000);
-			display_message(get_time(), num + 1, THINK);
-		}
-		else
-			exit (EXIT_SUCCESS);
-	}
-	return (NULL);
-}
-
 static int	create_monitor_threads(void)
 {
 	void	*result;
@@ -44,6 +21,31 @@ static int	create_monitor_threads(void)
 	return (EXIT_SUCCESS);
 }
 
+static void	*phi_life(void *a)
+{
+	long	num;
+
+	num = (long)a;
+	if (create_monitor_threads() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	while (1)
+	{	
+		if (g_data.must_eat == 0 \
+		|| (g_data.must_eat != 0 && g_data.phil[num].meals < g_data.must_eat))
+		{
+			get_forks(num);
+			g_data.phil[num].meals++;
+			put_down_forks(num);
+			display_message(get_time(), num + 1, SLEEP);
+			usleep(g_data.time_to_sleep * 1000);
+			display_message(get_time(), num + 1, THINK);
+		}
+		else
+			return (EXIT_SUCCESS);
+	}
+	return (NULL);
+}
+
 static int	create_philo_processes(void)
 {
 	long	i;
@@ -60,11 +62,11 @@ static int	create_philo_processes(void)
 		if (g_data.phil[i].pid == 0)
 			phi_life((void *)i);
 	}
-	ret = waitpid(-1, &status, 0);
-	if (WIFEXITED(status))
-		ret = WEXITSTATUS(status);
-	else if (ret < 0)
-		ret = EXIT_FAILURE;
+	i = -1;
+	while(++i < g_data.p)
+	{
+		waitpid(-1, &status, 0);
+	}
 	return (ret);
 }
 
@@ -74,7 +76,6 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (create_philo_processes() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (create_monitor_threads() == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	puts("I waited for all of them");
 	return (EXIT_SUCCESS);
 }
