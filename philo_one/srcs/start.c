@@ -31,18 +31,12 @@ static void	*phi_life(void *a)
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		if (g_data.must_eat == 0 \
-		|| (g_data.must_eat != 0 && g_data.phil[num].meals < g_data.must_eat))
-		{
-			get_forks(num);
-			g_data.phil[num].meals++;
-			put_down_forks(num);
-			display_message(get_time(), num + 1, SLEEP);
-			usleep(g_data.time_to_sleep * 1000);
-			display_message(get_time(), num + 1, THINK);
-		}
-		else
-			return (EXIT_SUCCESS);
+		get_forks(num);
+		g_data.phil[num].meals++;
+		put_down_forks(num);
+		display_message(get_time(), num + 1, SLEEP);
+		usleep(g_data.time_to_sleep * 1000);
+		display_message(get_time(), num + 1, THINK);
 	}
 	return (NULL);
 }
