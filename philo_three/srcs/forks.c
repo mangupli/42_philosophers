@@ -2,8 +2,10 @@
 
 /*
 ** Here I use the following solution for the dining philosopher problem:
-** waiter -> before taking forks, philosopher smust ask waiter if it has 
-** the right number of forks
+** hierarchy of resources -> the resources (waiter) are numbered 1 through
+** number_of_philosophers. Each unit of work (philosopher) will always pick up
+** the lower-numbered fork first, and then the higher-numbered fork,
+** from among the two waiter they plan to use.
 */
 
 void	put_down_forks(long num)

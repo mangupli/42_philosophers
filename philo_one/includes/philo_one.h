@@ -21,7 +21,6 @@ typedef struct s_phil
 {
 	t_ms				last_meal;
 	pthread_t			thread;
-	pid_t				pid;
 	pthread_mutex_t		fork;
 	int					meals;
 }						t_phil;

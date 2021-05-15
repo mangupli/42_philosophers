@@ -3,18 +3,21 @@
 void	*check_death(void *a)
 {
 	t_ms	time;
-	long	num;
+	int		i;
 
-	num = (long)a;
+	(void)a;
 	while (1)
 	{
-		time = get_time();
-		if (g_data.phil[num].last_meal + g_data.time_to_die < time)
+		i = -1;
+		while (++i < g_data.p)
 		{
-			sem_wait(g_data.exit);
-			display_message(time, i + 1, DIE);
-			exit(EXIT_FAILURE);
-		}	
+			time = get_time();
+			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
+			{
+				display_message(time, i + 1, DIE);
+				exit(EXIT_FAILURE);
+			}
+		}
 	}
 	return (NULL);
 }
@@ -22,16 +25,20 @@ void	*check_death(void *a)
 void	*finish_meal(void *a)
 {
 	int	i;
-	long num;
 
-	num = (long)a;
+	(void)a;
 	while (1)
 	{
-		if (g_data.phil[num].meals >= g_data.must_eat)
+		i = -1;
+		while (++i < g_data.p)
 		{
-			sem_wait(g_data.exit);
-			display_message(get_time(), 0, FINISH);
-			exit(EXIT_SUCCESS);
+			if (g_data.phil[i].meals < g_data.must_eat)
+				break ;
+			else if (i + 1 == g_data.p)
+			{
+				display_message(get_time(), 0, FINISH);
+				exit(EXIT_SUCCESS);
+			}
 		}
 	}
 	return (NULL);
