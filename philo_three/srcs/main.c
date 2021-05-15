@@ -1,12 +1,25 @@
 #include "philo_three.h"
 
+static int	create_monitor_threads(void)
+{
+	void	*result;
+
+	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
+		return (ft_error("Can'thread create a thread"));
+	if (pthread_join(g_data.death, &result) == -1)
+		return (ft_error("Can'thread join a thread"));
+	return (EXIT_SUCCESS);
+}
+
 static void	*phi_life(void *a)
 {
 	long	num;
 
 	num = (long)a;
+	if (create_monitor_threads() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	while (1)
-	{
+	{	
 		if (g_data.must_eat == 0 \
 		|| (g_data.must_eat != 0 && g_data.phil[num].meals < g_data.must_eat))
 		{
@@ -18,20 +31,9 @@ static void	*phi_life(void *a)
 			display_message(get_time(), num + 1, THINK);
 		}
 		else
-			exit (EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 	}
 	return (NULL);
-}
-
-static int	create_monitor_threads(void)
-{
-	void	*result;
-
-	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
-		return (ft_error("Can'thread create a thread"));
-	if (pthread_join(g_data.death, &result) == -1)
-		return (ft_error("Can'thread join a thread"));
-	return (EXIT_SUCCESS);
 }
 
 static int	create_philo_processes(void)
@@ -50,7 +52,16 @@ static int	create_philo_processes(void)
 			exit(EXIT_SUCCESS);
 		}
 	}
+<<<<<<< HEAD
 	return (EXIT_SUCCESS);
+=======
+	i = -1;
+	while(++i < g_data.p)
+	{
+		waitpid(-1, &status, 0);
+	}
+	return (ret);
+>>>>>>> c4fd6a3d6ebcc889cd2e74f6e3e62f6dd71dc3d2
 }
 
 int	main(int argc, char **argv)
@@ -62,6 +73,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (create_philo_processes() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+<<<<<<< HEAD
 	if (create_monitor_threads() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	i = -1;
@@ -73,5 +85,8 @@ int	main(int argc, char **argv)
 	sem_wait(g_data.exit);
 	display_message(get_time(), 0, FINISH);
 	exit(EXIT_SUCCESS);
+=======
+	puts("I waited for all of them");
+>>>>>>> c4fd6a3d6ebcc889cd2e74f6e3e62f6dd71dc3d2
 	return (EXIT_SUCCESS);
 }
