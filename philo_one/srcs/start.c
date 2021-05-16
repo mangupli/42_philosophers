@@ -42,31 +42,31 @@ static int	validator(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
-static int	init_phils(void)
+static init_phils(void)
 {
-	int	i;
+	int i;
 
-	g_data.phil = (t_phil *)malloc(sizeof(t_phil) * (g_data.p - 1));
+	g_data.phil = (t_phil *)malloc(sizeof(t_phil) * g_data.p);
 	if (g_data.phil == NULL)
-		ft_error("Malloc returned error");
+		return (ft_error("Malloc returned error"));
 	i = -1;
 	while (++i < g_data.p)
 	{
+		g_data.phil[i].id = i;
+		g_data.phil[i].meals = 0;
 		g_data.phil[i].last_meal = get_time();
 		pthread_mutex_init(&g_data.phil[i].fork, NULL);
-		g_data.phil[i].meals = 0;
 	}
-	return (EXIT_SUCCESS);
 }
 
-int	init(int argc, char **argv)
+int		init(int argc, char **argv)
 {
 	if (validator(argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (init_phils() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	pthread_mutex_init(&g_data.write, NULL);
-	pthread_mutex_init(&g_data.exit, NULL);
 	g_data.start_time = get_time();
 	return (EXIT_SUCCESS);
+
 }

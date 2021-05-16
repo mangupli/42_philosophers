@@ -15,14 +15,13 @@
 # define DIE 4
 # define FINISH 5
 
-typedef unsigned long long	t_ms;
-
 typedef struct s_phil
 {
-	t_ms				last_meal;
+	long				last_meal;
 	pthread_t			thread;
 	pthread_mutex_t		fork;
 	int					meals;
+	int 				id;
 }						t_phil;
 
 /*
@@ -32,7 +31,7 @@ typedef struct s_phil
 typedef struct s_data
 {
 	int					p;
-	t_ms				start_time;
+	long				start_time;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					time_to_die;
@@ -50,12 +49,13 @@ int		init(int argc, char **argv);
 int		ft_atoi(const char *str);
 int		ft_str_is_numeric(char *str);
 int		ft_error(char *str);
-t_ms	get_time(void);
+long	get_time(void);
 int		ft_strlen(char *str);
-int		display_message(t_ms ms, int no, int act);
+int		display_message(long ms, int no, int act);
 void	get_forks(long num);
 void	put_down_forks(long num);
 void	*finish_meal(void *a);
 void	*check_death(void *a);
+int		ft_usleep(int microsec_to_sleep);
 
 #endif

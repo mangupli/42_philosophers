@@ -3,14 +3,13 @@
 int	ft_error(char *str)
 {
 	printf("%s\n", str);
-	exit(EXIT_FAILURE);
 	return (EXIT_FAILURE);
 }
 
-t_ms	get_time(void)
+long	get_time(void)
 {
 	struct timeval	time;
-	t_ms			ms;
+	long			ms;
 
 	if (gettimeofday(&time, NULL) == -1)
 		return (EXIT_FAILURE);

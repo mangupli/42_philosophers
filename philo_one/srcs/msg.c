@@ -27,7 +27,7 @@ void	ft_putunbr(uintmax_t n)
 	}
 }
 
-static void	print_msg(t_ms time, int no, char *str)
+static void	print_msg(long time, int no, char *str)
 {
 	ft_putunbr(time);
 	ft_putchar(' ');
@@ -40,9 +40,9 @@ static void	print_msg(t_ms time, int no, char *str)
 	ft_putchar ('\n');
 }
 
-int	display_message(t_ms ms, int no, int act)
+int	display_message(long ms, int no, int act)
 {
-	t_ms	time;
+	long	time;
 
 	time = ms - g_data.start_time;
 	pthread_mutex_lock(&g_data.write);
