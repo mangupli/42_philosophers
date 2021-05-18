@@ -17,7 +17,7 @@ static int	parse_arguments(int argc, char **argv)
 	if (argc == 6)
 		g_data.must_eat = ft_atoi(argv[5]);
 	else
-		g_data.must_eat = 0;
+		g_data.must_eat = -1;
 	return (EXIT_SUCCESS);
 }
 
@@ -53,9 +53,9 @@ static int	init_phils(void)
 	while (++i < g_data.p)
 	{
 		g_data.phil[i].id = i;
-		g_data.phil[i].meals = 0;
 		g_data.phil[i].last_meal = get_time();
 		pthread_mutex_init(&g_data.phil[i].fork, NULL);
+		g_data.phil[i].full = 0;
 	}
 	return (EXIT_SUCCESS);
 }
