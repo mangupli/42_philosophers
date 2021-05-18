@@ -52,7 +52,6 @@ static int	init_phils(void)
 	i = -1;
 	while (++i < g_data.p)
 	{
-		g_data.phil[i].id = i;
 		g_data.phil[i].last_meal = get_time();
 		pthread_mutex_init(&g_data.phil[i].fork, NULL);
 		g_data.phil[i].full = 0;

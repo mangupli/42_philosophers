@@ -17,11 +17,6 @@ time_t	get_time(void)
 	return (ms);
 }
 
-time_t	get_print_time(time_t time_now)
-{
-	return (time_now - g_data.start_time);
-}
-
 int ft_usleep(time_t time_to_sleep)
 {
 	time_t	now;
@@ -34,5 +29,40 @@ int ft_usleep(time_t time_to_sleep)
 		usleep(STEP_TIME);
 		now = get_time();
 	}
+	return (EXIT_SUCCESS);
+}
+
+int ft_exit(int exit_code)
+{
+	free(g_data.phil);
+	return (exit_code);
+}
+
+int	display_message(long ms, int no, int act)
+{
+	long	time;
+	int 	i;
+
+	time = ms - g_data.start_time;
+	printf("%ld  ", time);
+	if (act == FINISH)
+	{
+		printf("my philosophers are full\n");
+		return (EXIT_SUCCESS);
+	}
+	i = -1;
+	while (++i < no)
+		printf("			");
+	no += 1;
+	if (act == TAKE_FORK)
+		printf("%d has taken a fork\n", no);
+	else if (act == EAT)
+		printf("%d is eating\n", no);
+	else if (act == SLEEP)
+		printf("%d is sleeping\n", no);
+	else if (act == THINK)
+		printf("%d is thinking\n", no);
+	else if (act == DIE)
+		printf("%d died\n", no);
 	return (EXIT_SUCCESS);
 }

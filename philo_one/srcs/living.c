@@ -1,14 +1,5 @@
 #include "philo_one.h"
 
-/*
-** Here I use the following solution for the dining philosopher problem:
-** hierarchy of resources -> the resources (forks) are numbered 1 through
-** number_of_philosophers. Each unit of work (philosopher) will always pick up
-** the lower-numbered fork first, and then the higher-numbered fork,
-** from among the two forks they plan to use.
-*/
-
-
 void	put_down_forks(long num)
 {
 	long next;
@@ -20,7 +11,6 @@ void	put_down_forks(long num)
 	pthread_mutex_unlock(&g_data.phil[next].fork);
 	pthread_mutex_unlock(&g_data.phil[num].fork);
 }
-
 
 void	get_forks_and_eat(long num)
 {

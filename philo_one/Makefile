@@ -14,7 +14,7 @@ LINK_INC = -I $(INC_DIR)
 # Source files #
 
 NAME = philo_$(NUMBER)
-SRCS = main.c utils.c start.c msg.c forks.c monitors.c libft.c
+SRCS = main.c utils.c start.c living.c libft.c
 
 # Object files #
 

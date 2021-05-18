@@ -3,7 +3,7 @@
 static void	*phi_life(void *a)
 {
 	long	num;
-	int 	meals;
+	int		meals;
 
 	meals = 0;
 	num = (long)a;
@@ -11,18 +11,24 @@ static void	*phi_life(void *a)
 		ft_usleep(g_data.time_to_eat);
 	while (1)
 	{
-		get_forks_and_eat(num);
-		meals++;
-		if (g_data.must_eat >= 0 && meals >= g_data.must_eat)
-			g_data.phil[num].full = 1;
-		put_down_forks(num);
-		pthread_mutex_lock(&g_data.write);
-		display_message(get_time(), num, SLEEP);
-		pthread_mutex_unlock(&g_data.write);
-		ft_usleep(g_data.time_to_sleep);
-		pthread_mutex_lock(&g_data.write);
-		display_message(get_time(), num, THINK);
-		pthread_mutex_unlock(&g_data.write);
+		if (g_data.must_eat == -1 \
+		|| (g_data.must_eat != -1 && meals < g_data.must_eat))
+		{
+			get_forks_and_eat(num);
+			meals++;
+			if (g_data.must_eat >= 0 && meals >= g_data.must_eat)
+				g_data.phil[num].full = 1;
+			put_down_forks(num);
+			pthread_mutex_lock(&g_data.write);
+			display_message(get_time(), num, SLEEP);
+			pthread_mutex_unlock(&g_data.write);
+			ft_usleep(g_data.time_to_sleep);
+			pthread_mutex_lock(&g_data.write);
+			display_message(get_time(), num, THINK);
+			pthread_mutex_unlock(&g_data.write);
+		}
+		else
+			break ;
 	}
 	return (NULL);
 }
@@ -39,35 +45,44 @@ static int	create_philo_threads(void)
 			return (ft_error("Can'thread create a thread"));
 		if (pthread_detach(g_data.phil[i].thread))
 			return (ft_error("Can'thread detach a thread"));
-		//ft_usleep(10); // TODO: do I need it?
 	}
 	return (EXIT_SUCCESS);
 }
 
-void	*check_death(void *a)
+static void	*check_death(void *a)
 {
 
 	time_t	time;
 	int		i;
+	int 	count_full;
 
 	(void)a;
+
 	while (1)
 	{
 		i = -1;
+		count_full = 0;
 		while (++i < g_data.p)
 		{
 			time = get_time();
+			pthread_mutex_lock(&g_data.write);
 			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
 			{
-				pthread_mutex_lock(&g_data.write);
 				display_message(time, i, DIE);
+				return(NULL);
+			}
+			pthread_mutex_unlock(&g_data.write);
+			count_full += g_data.phil[i].full;
+			if (count_full == g_data.p)
+			{
+				pthread_mutex_lock(&g_data.write);
+				display_message(time, i, FINISH);
 				return(NULL);
 			}
 		}
 	}
 	return (NULL);
 }
-
 
 static int create_monitor_thread(void)
 {
@@ -84,15 +99,12 @@ int	main(int argc, char **argv)
 {
 	if (init(argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (create_philo_threads() == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-
-	if (create_monitor_thread() == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-
-
-	//free smth and destroy mutexes
-
-	return (EXIT_SUCCESS);
-
+	if (g_data.must_eat > 0)
+	{
+		if (create_philo_threads() == EXIT_FAILURE)
+			return (ft_exit(EXIT_FAILURE));
+		if (create_monitor_thread() == EXIT_FAILURE)
+			return (ft_exit(EXIT_FAILURE));
+	}
+	return (ft_exit(EXIT_SUCCESS));
 }
