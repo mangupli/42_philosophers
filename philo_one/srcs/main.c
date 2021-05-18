@@ -47,8 +47,24 @@ static int	create_philo_threads(void)
 void	*check_death(void *a)
 {
 
+	time_t	time;
+	int		i;
+
+	(void)a;
 	while (1)
-		;
+	{
+		i = -1;
+		while (++i < g_data.p)
+		{
+			time = get_time();
+			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
+			{
+				pthread_mutex_lock(&g_data.write);
+				display_message(time, i, DIE);
+				return(NULL);
+			}
+		}
+	}
 	return (NULL);
 }
 
