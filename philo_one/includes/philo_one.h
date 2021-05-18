@@ -54,5 +54,6 @@ void	get_forks_and_eat(long num);
 void	put_down_forks(long num);
 int		ft_usleep(time_t time_to_sleep);
 int		ft_exit(int exit_code);
+void	sleep_and_think(long num);
 
 #endif

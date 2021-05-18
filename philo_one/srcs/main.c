@@ -19,13 +19,7 @@ static void	*phi_life(void *a)
 			if (g_data.must_eat >= 0 && meals >= g_data.must_eat)
 				g_data.phil[num].full = 1;
 			put_down_forks(num);
-			pthread_mutex_lock(&g_data.write);
-			display_message(get_time(), num, SLEEP);
-			pthread_mutex_unlock(&g_data.write);
-			ft_usleep(g_data.time_to_sleep);
-			pthread_mutex_lock(&g_data.write);
-			display_message(get_time(), num, THINK);
-			pthread_mutex_unlock(&g_data.write);
+			sleep_and_think(num);
 		}
 		else
 			break ;
@@ -51,13 +45,11 @@ static int	create_philo_threads(void)
 
 static void	*check_death(void *a)
 {
-
 	time_t	time;
 	int		i;
-	int 	count_full;
+	int		count_full;
 
 	(void)a;
-
 	while (1)
 	{
 		i = -1;
@@ -69,7 +61,7 @@ static void	*check_death(void *a)
 			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
 			{
 				display_message(time, i, DIE);
-				return(NULL);
+				return (NULL);
 			}
 			pthread_mutex_unlock(&g_data.write);
 			count_full += g_data.phil[i].full;
@@ -77,7 +69,7 @@ static void	*check_death(void *a)
 			{
 				pthread_mutex_lock(&g_data.write);
 				display_message(time, i, FINISH);
-				return(NULL);
+				return (NULL);
 			}
 		}
 	}
@@ -99,7 +91,7 @@ int	main(int argc, char **argv)
 {
 	if (init(argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (g_data.must_eat > 0)
+	if (g_data.must_eat != 0)
 	{
 		if (create_philo_threads() == EXIT_FAILURE)
 			return (ft_exit(EXIT_FAILURE));

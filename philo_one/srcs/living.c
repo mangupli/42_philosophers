@@ -1,5 +1,17 @@
 #include "philo_one.h"
 
+void	sleep_and_think(long num)
+{
+	pthread_mutex_lock(&g_data.write);
+	display_message(get_time(), num, SLEEP);
+	pthread_mutex_unlock(&g_data.write);
+	ft_usleep(g_data.time_to_sleep);
+	pthread_mutex_lock(&g_data.write);
+	display_message(get_time(), num, THINK);
+	pthread_mutex_unlock(&g_data.write);
+}
+
+
 void	put_down_forks(long num)
 {
 	long next;
