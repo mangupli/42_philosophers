@@ -44,7 +44,7 @@ static int	validator(int argc, char **argv)
 
 static int	init_phils(void)
 {
-	int i;
+	int	i;
 
 	g_data.phil = (t_phil *)malloc(sizeof(t_phil) * g_data.p);
 	if (g_data.phil == NULL)
@@ -59,7 +59,7 @@ static int	init_phils(void)
 	return (EXIT_SUCCESS);
 }
 
-int		init(int argc, char **argv)
+int	init(int argc, char **argv)
 {
 	if (validator(argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);

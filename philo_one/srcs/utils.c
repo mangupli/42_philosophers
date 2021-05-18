@@ -17,7 +17,7 @@ time_t	get_time(void)
 	return (ms);
 }
 
-int ft_usleep(time_t time_to_sleep)
+int	ft_usleep(time_t time_to_sleep)
 {
 	time_t	now;
 	time_t	end;
@@ -32,23 +32,23 @@ int ft_usleep(time_t time_to_sleep)
 	return (EXIT_SUCCESS);
 }
 
-int ft_exit(int exit_code)
+int	ft_exit(int exit_code)
 {
 	free(g_data.phil);
 	return (exit_code);
 }
 
-int	display_message(long ms, int no, int act)
+void	*display_message(long ms, int no, int act)
 {
 	long	time;
-	int 	i;
+	int		i;
 
 	time = ms - g_data.start_time;
 	printf("%ld  ", time);
 	if (act == FINISH)
 	{
 		printf("my philosophers are full\n");
-		return (EXIT_SUCCESS);
+		return (NULL);
 	}
 	i = -1;
 	while (++i < no)
@@ -64,5 +64,5 @@ int	display_message(long ms, int no, int act)
 		printf("%d is thinking\n", no);
 	else if (act == DIE)
 		printf("%d died\n", no);
-	return (EXIT_SUCCESS);
+	return (NULL);
 }

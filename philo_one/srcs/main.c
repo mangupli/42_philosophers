@@ -1,32 +1,5 @@
 #include "philo_one.h"
 
-static void	*phi_life(void *a)
-{
-	long	num;
-	int		meals;
-
-	meals = 0;
-	num = (long)a;
-	if ((num + 1) % 2 == 0)
-		ft_usleep(g_data.time_to_eat);
-	while (1)
-	{
-		if (g_data.must_eat == -1 \
-		|| (g_data.must_eat != -1 && meals < g_data.must_eat))
-		{
-			get_forks_and_eat(num);
-			meals++;
-			if (g_data.must_eat >= 0 && meals >= g_data.must_eat)
-				g_data.phil[num].full = 1;
-			put_down_forks(num);
-			sleep_and_think(num);
-		}
-		else
-			break ;
-	}
-	return (NULL);
-}
-
 static int	create_philo_threads(void)
 {
 	long		i;
@@ -59,29 +32,24 @@ static void	*check_death(void *a)
 			time = get_time();
 			pthread_mutex_lock(&g_data.write);
 			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
-			{
-				display_message(time, i, DIE);
-				return (NULL);
-			}
+				return (display_message(time, i, DIE));
 			pthread_mutex_unlock(&g_data.write);
 			count_full += g_data.phil[i].full;
 			if (count_full == g_data.p)
 			{
 				pthread_mutex_lock(&g_data.write);
-				display_message(time, i, FINISH);
-				return (NULL);
+				return (display_message(time, i, DIE));
 			}
 		}
 	}
-	return (NULL);
 }
 
-static int create_monitor_thread(void)
+static int	create_monitor_thread(void)
 {
-	void *result;
+	void	*result;
 
 	if (pthread_create(&g_data.death, NULL, check_death, NULL) == -1)
-		return(ft_error("Can'thread create a thread"));
+		return (ft_error("Can'thread create a thread"));
 	if (pthread_join(g_data.death, &result) == -1)
 		return (ft_error("Can'thread join a thread"));
 	return (EXIT_SUCCESS);

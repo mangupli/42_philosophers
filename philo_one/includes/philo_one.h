@@ -21,7 +21,7 @@ typedef struct s_phil
 	long				last_meal;
 	pthread_t			thread;
 	pthread_mutex_t		fork;
-	int 				full;
+	int					full;
 }						t_phil;
 
 /*
@@ -49,11 +49,9 @@ int		ft_str_is_numeric(char *str);
 int		ft_error(char *str);
 time_t	get_time(void);
 int		ft_strlen(char *str);
-int		display_message(long ms, int no, int act);
-void	get_forks_and_eat(long num);
-void	put_down_forks(long num);
+void	*display_message(long ms, int no, int act);
 int		ft_usleep(time_t time_to_sleep);
 int		ft_exit(int exit_code);
-void	sleep_and_think(long num);
+void	*phi_life(void *a);
 
 #endif

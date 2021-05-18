@@ -1,7 +1,7 @@
 # Compilation #
 
 NUMBER = one
-FLAGS = -pthread #-Wall -Wextra -Werror
+FLAGS = -pthread -Wall -Wextra -Werror
 
 # Directories #
 

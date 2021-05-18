@@ -1,6 +1,6 @@
 #include "philo_one.h"
 
-void	sleep_and_think(long num)
+static void	sleep_and_think(long num)
 {
 	pthread_mutex_lock(&g_data.write);
 	display_message(get_time(), num, SLEEP);
@@ -11,10 +11,9 @@ void	sleep_and_think(long num)
 	pthread_mutex_unlock(&g_data.write);
 }
 
-
-void	put_down_forks(long num)
+static void	put_down_forks(long num)
 {
-	long next;
+	long	next;
 
 	if (num == g_data.p - 1)
 		next = 0;
@@ -24,9 +23,9 @@ void	put_down_forks(long num)
 	pthread_mutex_unlock(&g_data.phil[num].fork);
 }
 
-void	get_forks_and_eat(long num)
+static void	get_forks_and_eat(long num)
 {
-	long next;
+	long	next;
 
 	if (num == g_data.p - 1)
 		next = 0;
@@ -43,4 +42,31 @@ void	get_forks_and_eat(long num)
 	display_message(g_data.phil[num].last_meal, num, EAT);
 	pthread_mutex_unlock(&g_data.write);
 	ft_usleep(g_data.time_to_eat);
+}
+
+void	*phi_life(void *a)
+{
+	long	num;
+	int		meals;
+
+	meals = 0;
+	num = (long)a;
+	if ((num + 1) % 2 == 0)
+		ft_usleep(g_data.time_to_eat);
+	while (1)
+	{
+		if (g_data.must_eat == -1 \
+		|| (g_data.must_eat != -1 && meals < g_data.must_eat))
+		{
+			get_forks_and_eat(num);
+			meals++;
+			if (g_data.must_eat >= 0 && meals >= g_data.must_eat)
+				g_data.phil[num].full = 1;
+			put_down_forks(num);
+			sleep_and_think(num);
+		}
+		else
+			break ;
+	}
+	return (NULL);
 }
