@@ -42,7 +42,7 @@ static int	validator(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
-static init_phils(void)
+static int	init_phils(void)
 {
 	int i;
 
@@ -57,6 +57,7 @@ static init_phils(void)
 		g_data.phil[i].last_meal = get_time();
 		pthread_mutex_init(&g_data.phil[i].fork, NULL);
 	}
+	return (EXIT_SUCCESS);
 }
 
 int		init(int argc, char **argv)
@@ -68,5 +69,4 @@ int		init(int argc, char **argv)
 	pthread_mutex_init(&g_data.write, NULL);
 	g_data.start_time = get_time();
 	return (EXIT_SUCCESS);
-
 }

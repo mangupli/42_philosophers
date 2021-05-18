@@ -14,6 +14,7 @@
 # define THINK 3
 # define DIE 4
 # define FINISH 5
+# define STEP_TIME 60
 
 typedef struct s_phil
 {
@@ -49,13 +50,14 @@ int		init(int argc, char **argv);
 int		ft_atoi(const char *str);
 int		ft_str_is_numeric(char *str);
 int		ft_error(char *str);
-long	get_time(void);
+time_t	get_time(void);
 int		ft_strlen(char *str);
 int		display_message(long ms, int no, int act);
 void	get_forks(long num);
 void	put_down_forks(long num);
 void	*finish_meal(void *a);
 void	*check_death(void *a);
-int		ft_usleep(int microsec_to_sleep);
+int		ft_usleep(time_t time_to_sleep);
+time_t	get_print_time(time_t time_now);
 
 #endif
