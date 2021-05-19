@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 static int	create_philo_threads(void)
 {
@@ -38,7 +38,7 @@ static void	*check_death(void *a)
 			if (count_full == g_data.p)
 			{
 				pthread_mutex_lock(&g_data.write);
-				return (display_message(time, i, FINISH));
+				return (display_message(time, i, DIE));
 			}
 		}
 	}

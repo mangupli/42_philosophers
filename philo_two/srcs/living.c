@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 static void	sleep_and_think(long num)
 {
@@ -55,7 +55,9 @@ void	*phi_life(void *a)
 		ft_usleep(g_data.time_to_eat);
 	while (1)
 	{
-		if (g_data.must_eat == -1 || g_data.phil[num].full != 1 )
+		if (g_data.must_eat == -1 \
+	//	|| (g_data.must_eat != -1 && meals < g_data.must_eat))
+		|| g_data.phil[num].full != 1 )
 		{
 			get_forks_and_eat(num);
 			meals++;
