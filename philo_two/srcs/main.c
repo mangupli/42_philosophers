@@ -30,15 +30,15 @@ static void	*check_death(void *a)
 		while (++i < g_data.p)
 		{
 			time = get_time();
-			pthread_mutex_lock(&g_data.write);
+			sem_wait(g_data.write);
 			if (g_data.phil[i].last_meal + g_data.time_to_die < time)
 				return (display_message(time, i, DIE));
-			pthread_mutex_unlock(&g_data.write);
+			sem_post(g_data.write);
 			count_full += g_data.phil[i].full;
 			if (count_full == g_data.p)
 			{
-				pthread_mutex_lock(&g_data.write);
-				return (display_message(time, i, DIE));
+				sem_wait(g_data.write);
+				return (display_message(time, i, FINISH));
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 # define PHILO_TWO_H
 
 # include <pthread.h> //pthread functions
+# include <semaphore.h> // semaphores
 # include <stdio.h> // printf
 # include <string.h> // memset
 # include <stdlib.h> // malloc, free,
@@ -20,7 +21,6 @@ typedef struct s_phil
 {
 	long				last_meal;
 	pthread_t			thread;
-	pthread_mutex_t		fork;
 	int					full;
 }						t_phil;
 
@@ -36,7 +36,8 @@ typedef struct s_data
 	int					time_to_sleep;
 	int					time_to_die;
 	int					must_eat;
-	pthread_mutex_t		write;
+	sem_t				*write;
+	sem_t				*forks;
 	t_phil				*phil;
 	pthread_t			death;
 }						t_data;

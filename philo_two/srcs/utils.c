@@ -34,6 +34,8 @@ int	ft_usleep(time_t time_to_sleep)
 
 int	ft_exit(int exit_code)
 {
+	sem_unlink("sem_forks");
+	sem_unlink("sem_write");
 	free(g_data.phil);
 	return (exit_code);
 }

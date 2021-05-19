@@ -53,9 +53,19 @@ static int	init_phils(void)
 	while (++i < g_data.p)
 	{
 		g_data.phil[i].last_meal = get_time();
-		pthread_mutex_init(&g_data.phil[i].fork, NULL);
 		g_data.phil[i].full = 0;
 	}
+	return (EXIT_SUCCESS);
+}
+
+static int	create_semaphores(void)
+{
+	sem_unlink("sem_forks");
+	sem_unlink("sem_write");
+	g_data.forks = sem_open("sem_forks", O_CREAT, 0666, g_data.p);
+	g_data.write = sem_open("sem_write", O_CREAT, 0666, 1);
+	if (g_data.forks == SEM_FAILED || g_data.write == SEM_FAILED)
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
@@ -65,7 +75,8 @@ int	init(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (init_phils() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	pthread_mutex_init(&g_data.write, NULL);
+	if (create_semaphores() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	g_data.start_time = get_time();
 	return (EXIT_SUCCESS);
 }
