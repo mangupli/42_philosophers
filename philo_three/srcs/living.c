@@ -11,26 +11,14 @@ static void	sleep_and_think(long num)
 	sem_post(g_data.write);
 }
 
-static void	put_down_forks(long num)
+static void	put_down_forks(void)
 {
-	long	next;
-
-	if (num == g_data.p - 1)
-		next = 0;
-	else
-		next = num + 1;
 	sem_post(g_data.forks);
 	sem_post(g_data.forks);
 }
 
 static void	get_forks_and_eat(long num)
 {
-	long	next;
-
-	if (num == g_data.p - 1)
-		next = 0;
-	else
-		next = num + 1;
 	sem_wait(g_data.forks);
 	sem_wait(g_data.write);
 	display_message(get_time(), num, TAKE_FORK);
@@ -44,16 +32,13 @@ static void	get_forks_and_eat(long num)
 	ft_usleep(g_data.time_to_eat);
 }
 
-void	*phi_life(int num)
+int	phi_life(int num)
 {
 	int		meals;
 	int		full;
 
 	if (create_monitor_thread(num) == EXIT_FAILURE)
-	{
-		ft_exit(EXIT_FAILURE);
-		return (NULL);
-	}
+		return (ft_exit(EXIT_FAILURE));
 	meals = 0;
 	full = 0;
 	if ((num + 1) % 2 == 0)
@@ -64,13 +49,10 @@ void	*phi_life(int num)
 		meals++;
 		if (g_data.must_eat >= 0 && meals >= g_data.must_eat)
 			full = 1;
-		put_down_forks(num);
+		put_down_forks();
 		if (full == 1)
-		{
-			sem_post(g_data.write);
 			exit(EXIT_SUCCESS);
-		}
 		sleep_and_think(num);
 	}
-	return (NULL);
+	return (EXIT_SUCCESS);
 }

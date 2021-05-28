@@ -61,12 +61,9 @@ static int	create_semaphores(void)
 {
 	sem_unlink("sem_forks");
 	sem_unlink("sem_write");
-	sem_unlink("sem_full");
 	g_data.forks = sem_open("sem_forks", O_CREAT, 0666, g_data.p);
 	g_data.write = sem_open("sem_write", O_CREAT, 0666, 1);
-	g_data.full = sem_open("sem_full", O_CREAT, 0666, 1);
-	if (g_data.forks == SEM_FAILED || g_data.write == SEM_FAILED \
-											|| g_data.full == SEM_FAILED)
+	if (g_data.forks == SEM_FAILED || g_data.write == SEM_FAILED)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -80,5 +77,6 @@ int	init(int argc, char **argv)
 	if (create_semaphores() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	g_data.start_time = get_time();
+	g_data.count_full = 0;
 	return (EXIT_SUCCESS);
 }

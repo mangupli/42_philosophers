@@ -36,8 +36,8 @@ int	ft_exit(int exit_code)
 {
 	sem_unlink("sem_forks");
 	sem_unlink("sem_write");
-	sem_unlink("sem_full");
 	exit(exit_code);
+	return (exit_code);
 }
 
 void	*display_message(long ms, int no, int act)

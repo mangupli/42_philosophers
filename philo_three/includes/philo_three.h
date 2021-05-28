@@ -40,8 +40,7 @@ typedef struct s_data
 	sem_t				*write;
 	sem_t				*forks;
 	t_phil				*phil;
-	pthread_t			death;
-	sem_t 				*full;
+	int					count_full;
 }						t_data;
 
 t_data						g_data;
@@ -55,7 +54,7 @@ int		ft_strlen(char *str);
 void	*display_message(long ms, int no, int act);
 int		ft_usleep(time_t time_to_sleep);
 int		ft_exit(int exit_code);
-void	*phi_life(int num);
+int		phi_life(int num);
 int		create_monitor_thread(long int num);
 
 #endif
