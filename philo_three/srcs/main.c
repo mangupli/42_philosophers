@@ -26,13 +26,7 @@ static void	*check_death(void *a)
 	{
 		time = get_time();
 		if (g_data.phil[num].last_meal + g_data.time_to_die < time)
-		{
-			sem_wait(g_data.write);
-			display_message(time, num, DIE);
-			sem_post(g_data.write);
 			exit(EXIT_FAILURE);
-			return (NULL);
-		}
 	}
 }
 
@@ -48,15 +42,20 @@ int	create_monitor_thread(long int num)
 
 void	parent_waiting(void)
 {
-	int	i;
-	int	status;
+	int		i;
+	int		status;
+	pid_t	pid;
 
-	waitpid(-1, &status, 0);
+	pid = waitpid(-1, &status, 0);
 	if (WEXITSTATUS(status) == EXIT_FAILURE)
 	{
 		i = -1;
 		while (++i < g_data.p)
+		{
+			if (pid == g_data.phil[i].pid)
+				display_message(get_time(), i, DIE);
 			kill(g_data.phil[i].pid, SIGKILL);
+		}
 	}
 	if (WEXITSTATUS(status) == EXIT_SUCCESS)
 	{
