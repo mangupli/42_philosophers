@@ -1,5 +1,0 @@
-.DS_Store
-objs
-.gitignore
-cmake-build-debug
-CMakeLists.txt
