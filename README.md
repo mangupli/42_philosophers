@@ -19,3 +19,7 @@ Dining philosophers problem resolved differently using mutexes and semaphores, t
 - one semaphore to represent the number of forks
 - output is protected against multiple access by another semaphore
 
+### how to start
+
+In each directory there is a Makefile that creates executable.
+
